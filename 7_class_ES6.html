@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7. Classes in JS</title>
+</head>
+
+<body>
+
+    <div id="box1"></div>
+    <div id="box2"></div>
+    <div id="circle"></div>
+
+    <script>
+        class Animal { // class это удобный синтаксис для написания больштого количества обьектов
+
+            static type = 'ANIMAL' // static method доступен только в самом классе
+
+            constructor(options) { // init value
+                this.name = options.name;
+                this.age = options.age;
+                this.hasTail = options.hasTail;
+            }
+
+            voice() { // animal.voice() located in proto of animal
+                console.log('I am animal');
+            }
+
+        }
+
+        const animal = new Animal({ // proto - constructor: class Animal - Object
+            name: 'Animal',
+            age: 5,
+            hasTail: true,
+            color: 'yellow' // не сработает так как данный класс не имеет такого ключа
+        })
+
+        class Cat extends Animal { // налседование
+            static type = 'CAT'
+
+            constructor(options) {
+                super(options) // поскольку это дочерний класс, чтобы обьявить для него свойство в конструкторе нужно использовать метод super(), данный метод вызовет конструктор родителя
+                this.color = options.color;
+            }
+
+            voice() { // обновленный метод voice
+                super.voice() // I am animal
+                console.log('I am Cat');
+            }
+
+            get ageInfo() {
+                return this.age * 7; // cat.ageInfo // 49
+            }
+
+            set ageInfo(newAge) {
+                this.age = newAge;
+                // in browser log
+                // cat.ageInfo = 10
+                // cat.ageInfo = 70 (get)
+            }
+        }
+
+        const cat = new Cat({ // ptoto - animal
+            name: 'cat',
+            age: 7,
+            hasTail: true,
+            color: 'black' // borwser.log cat не имеет ключа color потому что он не определен в конструкторе главного класса Animal
+            // cat.voice() // I am animal
+        })
+
+
+        // =========================== Practic
+
+        class Component {
+            constructor(selector) {
+                this.$el = document.querySelector(selector)
+            }
+
+            hide() {
+                this.$el.style.display = 'none'
+            }
+
+            show() {
+                this.$el.style.display = 'block'
+            }
+        }
+
+        class Box extends Component {
+            constructor(options) {
+                super(options.selector)
+
+                this.$el.style.width = this.$el.style.height = options.size + 'px';
+                this.$el.style.background = options.color;
+            }
+
+        }
+
+        const box1 = new Box({
+            selector: '#box1',
+            size: 100,
+            color: 'red'
+        })
+
+        const box2 = new Box({
+            selector: '#box2',
+            size: 150,
+            color: 'green'
+        })
+
+        class Circle extends Box {
+            constructor(options) {
+                super(options)
+                this.$el.style.borderRadius = '50%';
+            }
+        }
+
+        const circle = new Circle({
+            selector: '#circle',
+            size: 180,
+            color: 'blue'
+        })
+    </script>
+    <!-- box1.show() -->
+    <!-- box1.hide() -->
+</body>
+
+</html>
